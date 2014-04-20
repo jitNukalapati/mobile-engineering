@@ -2,10 +2,10 @@
 <resources>
 
     <string name="app_name">MobileEng</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
     <!-- JSON feed url -->
     <string name="feed_url">http://sheltered-bastion-2512.herokuapp.com/feed.json</string>
 
+    <string name="error_retrieving_feed">Cannot display deals at this time. Please try again later.</string>
 </resources>
