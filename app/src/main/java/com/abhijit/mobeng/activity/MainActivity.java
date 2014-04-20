@@ -1,9 +1,13 @@
 package com.abhijit.mobeng.activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -38,8 +42,9 @@ public class MainActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
-        vDealsListView.setAdapter(new DealsAdapter(MainActivity.this, R.layout.list_row, new ArrayList<Deal>()));
-        createVolleyRequest(getString(R.string.feed_url));
+        setupListView();
+
+        dispatchVolleyRequest(getString(R.string.feed_url)); // fetch data
     }
 
 
@@ -63,11 +68,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     /**
-     * Creates and initiates a volley GET request to retrieve json from the given url
+     * Creates and initiates a volley GET request to retrieve json from the given url, using
+     * {@link com.abhijit.mobeng.util.JsonArrayRequest}
      *
      * @param url url to retrieve the json from
      */
-    private void createVolleyRequest(String url) {
+    private void dispatchVolleyRequest(String url) {
         RequestQueue queue = Volley.newRequestQueue(this);
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(url,
                     new Response.Listener<JsonArray>() {
@@ -76,7 +82,7 @@ public class MainActivity extends ActionBarActivity {
                             ArrayAdapter dealsArrayAdapter = (ArrayAdapter) vDealsListView.getAdapter();
                             dealsArrayAdapter.clear();
 
-                            List<Deal> deals = new Gson().fromJson(jsonArray, new TypeToken<List<Deal>>(){}.getType());
+                            List<Deal> deals = new Gson().fromJson(jsonArray, new TypeToken<List<Deal>>() {}.getType());
                             dealsArrayAdapter.addAll(deals); // XXX: requires api level 11
                         }
                     },
@@ -90,4 +96,31 @@ public class MainActivity extends ActionBarActivity {
         queue.add(jsonObjectRequest);
     }
 
+    /**
+     * Attaches a {@link com.abhijit.mobeng.adapter.DealsAdapter} and an {@link android.widget.AdapterView.OnItemClickListener}
+     * to {@link #vDealsListView}
+     */
+    private void setupListView() {
+        vDealsListView.setAdapter(new DealsAdapter(MainActivity.this, R.layout.list_row, new ArrayList<Deal>()));
+        vDealsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Deal deal = (Deal) vDealsListView.getAdapter().getItem(position);
+                if(deal != null) {
+                    startBrowserIntent(deal.getHref());
+                }
+            }
+        });
+    }
+
+
+    /**
+     * Displays the content of the url in a web browser
+     * @param url a String
+     */
+    private void startBrowserIntent(String url){
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse(url));
+        startActivity(i);
+    }
 }
