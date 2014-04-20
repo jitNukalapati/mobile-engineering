@@ -4,16 +4,24 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.abhijit.mobeng.R;
+import com.abhijit.mobeng.adapter.DealsAdapter;
+import com.abhijit.mobeng.model.Deal;
 import com.abhijit.mobeng.util.JsonArrayRequest;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,8 +38,8 @@ public class MainActivity extends ActionBarActivity {
 
         ButterKnife.inject(this);
 
+        vDealsListView.setAdapter(new DealsAdapter(MainActivity.this, R.layout.list_row, new ArrayList<Deal>()));
         createVolleyRequest(getString(R.string.feed_url));
-
     }
 
 
@@ -65,7 +73,11 @@ public class MainActivity extends ActionBarActivity {
                     new Response.Listener<JsonArray>() {
                         @Override
                         public void onResponse(JsonArray jsonArray) {
-                            // TODO: consume json
+                            ArrayAdapter dealsArrayAdapter = (ArrayAdapter) vDealsListView.getAdapter();
+                            dealsArrayAdapter.clear();
+
+                            List<Deal> deals = new Gson().fromJson(jsonArray, new TypeToken<List<Deal>>(){}.getType());
+                            dealsArrayAdapter.addAll(deals); // XXX: requires api level 11
                         }
                     },
                     new Response.ErrorListener() {

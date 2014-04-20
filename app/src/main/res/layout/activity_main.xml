@@ -6,5 +6,6 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawSelectorOnTop="true"
         android:id="@+id/deals_list_view"/>
 </LinearLayout>
