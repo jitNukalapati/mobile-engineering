@@ -1,0 +1,12 @@
+# Intellij project files
+*.iml
+.idea/
+
+# gradle
+.gradle/
+
+# Local configuration files
+local.properties
+
+# OS files
+*.DS_Store
