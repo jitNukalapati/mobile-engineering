@@ -45,11 +45,10 @@ public class DealsAdapter extends ArrayAdapter<Deal>{
         }
 
         Deal deal = mDeals.get(position);
-
         holder.dealTitle.setText(deal.getAttrib());
         Picasso.with(getContext())
                 .load(deal.getSrc())
-                .placeholder(new ColorDrawable(0x00000000))
+                .placeholder(getTransparentColorDrawable())
                 .into(holder.dealImage);
 
         User user = deal.getUser();
@@ -57,16 +56,19 @@ public class DealsAdapter extends ArrayAdapter<Deal>{
             holder.userName.setText(deal.getUser().getName());
             Picasso.with(getContext())
                     .load(user.getAvatar().getSrc())
-                    .placeholder(new ColorDrawable(0x00000000))
+                    .placeholder(getTransparentColorDrawable())
                     .into(holder.userImage);
         } else {
             holder.userName.setText("");
-            holder.userImage.setImageDrawable(new ColorDrawable(0x00000000));
+            holder.userImage.setImageDrawable(getTransparentColorDrawable());
         }
 
         return convertView;
     }
 
+    private ColorDrawable getTransparentColorDrawable(){
+        return new ColorDrawable(0x00000000);
+    }
 
     static class ViewHolder {
         @InjectView(R.id.deal_title) TextView dealTitle;

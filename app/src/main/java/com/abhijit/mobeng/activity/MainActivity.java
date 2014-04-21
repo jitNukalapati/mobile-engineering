@@ -1,12 +1,15 @@
 package com.abhijit.mobeng.activity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -65,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
                             dealsArrayAdapter.clear();
 
                             List<Deal> deals = new Gson().fromJson(jsonArray, new TypeToken<List<Deal>>() {}.getType());
-                            dealsArrayAdapter.addAll(deals); // XXX: requires api level 11
+                            bindDataToAdapter(dealsArrayAdapter, deals);
                         }
                     },
                     new Response.ErrorListener() {
@@ -109,6 +112,19 @@ public class MainActivity extends ActionBarActivity {
         startActivity(i);
     }
 
+    /**
+     * Binds the given deals list to the adapter
+     * @param adapter the adapter that will contain the data
+     * @param deals a List
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void bindDataToAdapter(ArrayAdapter adapter, List<Deal> deals){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            adapter.addAll(deals);
+        } else {
+            for(Deal deal : deals) adapter.add(deal);
+        }
+    }
 
     private void showProgressBar(){
         mProgressBar.setVisibility(View.VISIBLE);
