@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.abhijit.mobeng.R;
 import com.abhijit.mobeng.model.Deal;
+import com.abhijit.mobeng.model.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -51,6 +52,18 @@ public class DealsAdapter extends ArrayAdapter<Deal>{
                 .placeholder(new ColorDrawable(0x00000000))
                 .into(holder.dealImage);
 
+        User user = deal.getUser();
+        if(user != null) {
+            holder.userName.setText(deal.getUser().getName());
+            Picasso.with(getContext())
+                    .load(user.getAvatar().getSrc())
+                    .placeholder(new ColorDrawable(0x00000000))
+                    .into(holder.userImage);
+        } else {
+            holder.userName.setText("");
+            holder.userImage.setImageDrawable(new ColorDrawable(0x00000000));
+        }
+
         return convertView;
     }
 
@@ -58,6 +71,9 @@ public class DealsAdapter extends ArrayAdapter<Deal>{
     static class ViewHolder {
         @InjectView(R.id.deal_title) TextView dealTitle;
         @InjectView(R.id.deal_image) ImageView dealImage;
+
+        @InjectView(R.id.user_name) TextView userName;
+        @InjectView(R.id.user_image) ImageView userImage;
 
         public ViewHolder(View view) {
             ButterKnife.inject(this, view);

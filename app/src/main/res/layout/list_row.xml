@@ -24,4 +24,31 @@
         android:layout_alignBottom="@+id/deal_image"
 
         android:id="@+id/deal_title" />
+
+    <ImageView
+        android:layout_width="@dimen/user_image_size"
+        android:layout_height="@dimen/user_image_size"
+
+        android:scaleType="fitCenter"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+
+        android:id="@+id/user_image"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+
+        android:background="#70000000"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/user_image"
+        android:layout_alignRight="@+id/user_image"
+
+        android:id="@+id/user_name" />
+
 </RelativeLayout>
