@@ -1,6 +1,7 @@
 package com.abhijit.mobeng.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class DealsAdapter extends ArrayAdapter<Deal>{
         holder.dealTitle.setText(deal.getAttrib());
         Picasso.with(getContext())
                 .load(deal.getSrc())
+                .placeholder(new ColorDrawable(0x00000000))
                 .into(holder.dealImage);
 
         return convertView;
