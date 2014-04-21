@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.abhijit.mobeng.R;
@@ -32,6 +33,7 @@ import butterknife.InjectView;
 public class MainActivity extends ActionBarActivity {
 
     @InjectView(R.id.deals_list_view) ListView vDealsListView;
+    @InjectView(R.id.progress) ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class MainActivity extends ActionBarActivity {
                     new Response.Listener<JsonArray>() {
                         @Override
                         public void onResponse(JsonArray jsonArray) {
+                            hideProgressBar();
+
                             ArrayAdapter dealsArrayAdapter = (ArrayAdapter) vDealsListView.getAdapter();
                             dealsArrayAdapter.clear();
 
@@ -67,11 +71,15 @@ public class MainActivity extends ActionBarActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError volleyError) {
+                            hideProgressBar();
+
                             Toast.makeText(MainActivity.this, getString(R.string.error_retrieving_feed), Toast.LENGTH_LONG).show();
                         }
                     }
                 );
         queue.add(jsonObjectRequest);
+
+        showProgressBar();
     }
 
     /**
@@ -91,7 +99,6 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
-
     /**
      * Displays the content of the url in a web browser
      * @param url a String
@@ -100,5 +107,14 @@ public class MainActivity extends ActionBarActivity {
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
         startActivity(i);
+    }
+
+
+    private void showProgressBar(){
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar(){
+        mProgressBar.setVisibility(View.GONE);
     }
 }

@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="user_image_size">100dp</dimen>
+    <dimen name="listview_divider_height">15dp</dimen>
+
     </resources>
